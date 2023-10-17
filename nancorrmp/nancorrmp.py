@@ -5,6 +5,7 @@ import pandas as pd
 import multiprocessing as mp
 from typing import *
 from scipy.special import btdtr
+from tqdm import tqdm 
 
 shared_variables_dictionary = {}
 
@@ -65,7 +66,7 @@ class NaNCorrMp:
                      initializer=NaNCorrMp._init_worker,
                      initargs=(X_raw, finite_mask_raw, X_corr_raw, X_np.shape, X_corr_np.shape, X_p_value_raw)) \
                 as pool:
-            list(pool.imap_unordered(worker_function, arguments, chunks))
+            list(tqdm(pool.imap_unordered(worker_function, arguments, chunks)))
 
         for i in range(X_corr_np.shape[0]):
             X_corr_np[i][i] = 1.0
